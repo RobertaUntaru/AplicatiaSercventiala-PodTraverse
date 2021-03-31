@@ -17,8 +17,8 @@ public class Manufacture {
         InetAddress host = InetAddress.getLocalHost();
         //Initialize
         Socket socket = null;
-        ObjectOutputStream oos = null;
-        ObjectInputStream ois = null;
+        ObjectOutputStream outputStream = null;
+        ObjectInputStream inputStream = null;
  
         long NumberOfBeamsNeeded = 617643; //get the number of beams
         int sum = 0; 		//number of hours worked
@@ -33,21 +33,21 @@ public class Manufacture {
         	//establish socket connection to server
             socket = new Socket(host.getHostName(), 9876);
             //write to socket
-            oos = new ObjectOutputStream(socket.getOutputStream());
+            outputStream = new ObjectOutputStream(socket.getOutputStream());
            //print the number of beams needed left
             System.out.println("Number of beams needed: " + NumberLeftReq);
             //if there are not beams left
             if(NumberLeftReq < 0)
             	//send to the served message exit to know to stop
-            	oos.writeObject("exit");
+            	outputStream.writeObject("exit");
             else 
             	//write in server the beam sent
-            	oos.writeObject(""+i);
+            	outputStream.writeObject(""+i);
             NumberLeftReq--; //discrement the number of beams
             //read the server response message
-            ois = new ObjectInputStream(socket.getInputStream());
+            inputStream = new ObjectInputStream(socket.getInputStream());
             //get the time worked from server
-            int time = (int) ois.readObject();
+            int time = (int) inputStream.readObject();
             sum = sum + time; //calculate the number of hours worked
             if(sum == 24)     //if there are 24 hours worked
             {
@@ -58,8 +58,8 @@ public class Manufacture {
             }
         }
             //close resources
-            ois.close();
-            oos.close();
+        	inputStream.close();
+            outputStream.close();
             //the end time
             long end = System.currentTimeMillis();
             NumberFormat formatter = new DecimalFormat("#0.00000");
