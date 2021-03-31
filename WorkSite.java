@@ -27,24 +27,24 @@ public class WorkSite {
         	//creating socket and waiting for client connection
             Socket socket = server.accept();
             //read from socket
-            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+            ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
             //convert object
-            String message = (String) ois.readObject();
+            String message = (String) inputStream.readObject();
            
             //print message with beams receiver
             System.out.println("Beams Received: " + message);
             //create ObjectOutputStream object
-            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+            ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
              
             //intialize the time worked for a beam
             int time = 1; //one hour
             
             //write object to socket
-            oos.writeObject(time);
+            outputStream.writeObject(time);
             
             //cloase resources
-            ois.close();
-            oos.close();
+            inputStream.close();
+            outputStream.close();
             socket.close();
             //terminate the server if client sends exit request
             if(message.equalsIgnoreCase("exit")) 
